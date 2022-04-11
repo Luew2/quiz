@@ -18,15 +18,19 @@ func main() {
 	if err != nil {
 		exit(fmt.Sprintf("Failed to open the CSV file: %s", *csvFile))
 	}
-	r := csv.NewReader(file)
+	quiz(*timer, file)
+}
+
+func quiz(t int, f *os.File) {
+	r := csv.NewReader(f)
 	lines, err := r.ReadAll()
 	if err != nil {
 		exit("Failed to parse CSV file")
 	}
 	problems := parseLines(lines)
 	correct := 0
-	fmt.Printf("You have %v seconds to finish this quiz:\n", *timer)
-	stopWatch := time.NewTimer(time.Duration(*timer) * time.Second)
+	fmt.Printf("You have %v seconds to finish this quiz:\n", t)
+	stopWatch := time.NewTimer(time.Duration(t) * time.Second)
 problemLoop:
 	for i, p := range problems {
 		fmt.Printf("problem #%d: %s\n", i+1, p.q)
